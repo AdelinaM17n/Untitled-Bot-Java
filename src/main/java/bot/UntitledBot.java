@@ -24,7 +24,7 @@ public class UntitledBot {
         );
 
         addCommands(
-                new BanCommand("ban")
+                new BanCommand()
         );
 
         jda.build();

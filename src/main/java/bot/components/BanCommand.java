@@ -1,17 +1,28 @@
 package bot.components;
 
+import bot.components.annotations.ArgType;
+import bot.components.annotations.CommandArg;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
+
+import java.util.HashMap;
 
 public class BanCommand extends ChatCommand{
+    private static final String COMMAND = "ban";
 
-    public BanCommand(String name) {
-        super(name);
+    @CommandArg(type = ArgType.NORMAL, index = 0)
+    private User targetArg;
+    @CommandArg(type = ArgType.STRING_COALESCING, index = 1)
+    private String reasonArg;
+
+    public BanCommand() {
+        super(COMMAND);
     }
 
     @Override
-    public void run(String[] args, Message message, Guild guild) {
-        guild.ban(args[0],0).complete();
+    public void run(HashMap<String,String> args, Message message, Guild guild) {
+        guild.ban(args.get("targetArg"),0,args.get("reasonArg")).complete();
         message.reply("bruh").complete();
     }
 }

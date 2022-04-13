@@ -3,6 +3,8 @@ package bot.components;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 
+import java.util.HashMap;
+
 public abstract class ChatCommand {
     private final String name;
 
@@ -10,11 +12,7 @@ public abstract class ChatCommand {
         this.name = name;
     }
 
-    public abstract void run(String[] args, Message message, Guild guild);
-
-    public void setName(String name){
-        name = name;
-    }
+    public abstract void run(HashMap<String,String> args, Message message, Guild guild);
     public String getName(){
         return name;
     }
