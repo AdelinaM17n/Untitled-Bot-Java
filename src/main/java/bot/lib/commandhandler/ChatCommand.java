@@ -21,7 +21,7 @@ public abstract class ChatCommand {
 
     private int setNonOptionalArgCount(){
         var fieldList =  new ArrayList<>(Arrays.stream(this.getClass().getDeclaredFields()).toList());
-        fieldList.removeIf(field -> field.isAnnotationPresent(CommandArg.class) && field.getAnnotation(CommandArg.class).optional());
+        fieldList.removeIf(field -> !field.isAnnotationPresent(CommandArg.class) || (field.isAnnotationPresent(CommandArg.class) && field.getAnnotation(CommandArg.class).optional()));
         return fieldList.size();
     }
 

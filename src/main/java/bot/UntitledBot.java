@@ -1,6 +1,7 @@
 package bot;
 
 import bot.components.BanCommand;
+import bot.components.UnbanCommand;
 import bot.lib.commandhandler.ChatCommand;
 import bot.lib.commandhandler.CommandHandler;
 import net.dv8tion.jda.api.JDABuilder;
@@ -24,7 +25,8 @@ public class UntitledBot {
         );
 
         addCommands(
-                new BanCommand()
+                new BanCommand(),
+                new UnbanCommand()
         );
 
         jda.build();
