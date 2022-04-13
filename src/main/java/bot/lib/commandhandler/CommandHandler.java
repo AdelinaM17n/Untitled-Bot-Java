@@ -42,17 +42,6 @@ public class CommandHandler extends ListenerAdapter {
         for(Field field : fieldList){ orderedList[field.getAnnotation(CommandArg.class).index()] = field; }
 
         HashMap<String,String> hashMap = new HashMap<>();
-        //var orderedListList = new ArrayList<>(Arrays.asList(orderedList));
-        /*for(Field field : orderedList){
-            if(field.getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
-                hashMap.put(field.getName(), String.join(" ", contents));
-                break;
-            }else {
-                hashMap.put(field.getName(), contents.get(0));
-                contents.remove(0);
-            }
-        }*/
-
         for(int i =0; i < orderedList.length; i++){
             if(orderedList[i].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
                 hashMap.put(orderedList[i].getName(), String.join(" ", contents));

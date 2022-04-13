@@ -24,6 +24,6 @@ public class BanCommand extends ChatCommand {
     @Override
     public void run(HashMap<String,String> args, Message message, Guild guild) {
         guild.ban(args.get("targetArg"),0,args.get("reasonArg")).complete();
-        message.reply("Successfully banned" + guild.getJDA().getUserById(args.get("targetArg")).getName()).complete();
+        message.reply(" I'm not so open-minded that I've lost my brains").complete();
     }
 }
