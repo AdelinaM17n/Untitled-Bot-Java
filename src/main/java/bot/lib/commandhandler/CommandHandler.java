@@ -36,13 +36,14 @@ public class CommandHandler extends ListenerAdapter {
     public HashMap<String,String> parseArgument(ArrayList<String> contents, ChatCommand commandObject){
         var fieldList = new ArrayList<>(Arrays.asList(commandObject.getClass().getDeclaredFields()));
         fieldList.removeIf(field -> !field.isAnnotationPresent(CommandArg.class));
-        if(contents.size() < fieldList.size()) return null;
+        if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
 
         Field[] orderedList = new Field[fieldList.size()];
         for(Field field : fieldList){ orderedList[field.getAnnotation(CommandArg.class).index()] = field; }
 
         HashMap<String,String> hashMap = new HashMap<>();
-        for(Field field : orderedList){
+        //var orderedListList = new ArrayList<>(Arrays.asList(orderedList));
+        /*for(Field field : orderedList){
             if(field.getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
                 hashMap.put(field.getName(), String.join(" ", contents));
                 break;
@@ -50,7 +51,20 @@ public class CommandHandler extends ListenerAdapter {
                 hashMap.put(field.getName(), contents.get(0));
                 contents.remove(0);
             }
+        }*/
+
+        for(int i =0; i < orderedList.length; i++){
+            if(orderedList[i].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
+                hashMap.put(orderedList[i].getName(), String.join(" ", contents));
+                orderedList[i] = null;
+                break;
+            }else {
+                hashMap.put(orderedList[i].getName(), contents.get(0));
+                contents.remove(0);
+                orderedList[i] = null;
+            }
         }
-        return hashMap;
+
+        return Arrays.stream(orderedList).anyMatch(field -> field != null && !field.getAnnotation(CommandArg.class).optional()) ? null : hashMap;
     }
 }
