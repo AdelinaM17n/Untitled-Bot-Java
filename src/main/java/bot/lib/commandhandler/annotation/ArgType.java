@@ -1,4 +1,4 @@
-package bot.components.annotations;
+package bot.lib.commandhandler.annotation;
 
 public enum ArgType {
     NORMAL,

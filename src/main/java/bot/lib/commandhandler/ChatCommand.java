@@ -1,4 +1,4 @@
-package bot.components;
+package bot.lib.commandhandler;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;

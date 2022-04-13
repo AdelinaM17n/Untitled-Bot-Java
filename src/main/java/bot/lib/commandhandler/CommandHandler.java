@@ -1,8 +1,8 @@
-package bot.components;
+package bot.lib.commandhandler;
 
 import bot.UntitledBot;
-import bot.components.annotations.ArgType;
-import bot.components.annotations.CommandArg;
+import bot.lib.commandhandler.annotation.ArgType;
+import bot.lib.commandhandler.annotation.CommandArg;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package bot.components.annotations;
+package bot.lib.commandhandler.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

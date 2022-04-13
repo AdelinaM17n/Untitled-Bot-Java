@@ -1,8 +1,8 @@
 package bot;
 
 import bot.components.BanCommand;
-import bot.components.ChatCommand;
-import bot.components.CommandHandler;
+import bot.lib.commandhandler.ChatCommand;
+import bot.lib.commandhandler.CommandHandler;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.requests.GatewayIntent;
