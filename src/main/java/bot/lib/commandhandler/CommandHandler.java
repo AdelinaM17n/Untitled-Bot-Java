@@ -26,7 +26,9 @@ public class CommandHandler extends ListenerAdapter {
 
         ChatCommand commandObject = UntitledBot.CommandMap.get(command);
         var args = parseArgument(commandArgContents,commandObject);
-        if (args == null) return;
+        if (args == null && commandObject.hasNonOptionalArgs()) {
+            return;
+        }
 
         commandObject.run(args, event.getMessage(), event.getGuild());
     }

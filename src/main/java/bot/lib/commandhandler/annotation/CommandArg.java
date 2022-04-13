@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface CommandArg {
     ArgType type() default ArgType.NORMAL;
-    int index() default 0;
+    int index();
+    boolean optional() default false;
     //String description() default "";
 }
