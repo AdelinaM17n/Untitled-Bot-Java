@@ -1,7 +1,7 @@
 package bot.components;
 
-import bot.lib.commandhandler.annotation.ArgType;
 import bot.lib.commandhandler.ChatCommand;
+import bot.lib.commandhandler.annotation.ArgType;
 import bot.lib.commandhandler.annotation.CommandArg;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -22,8 +22,8 @@ public class BanCommand extends ChatCommand {
     }
 
     @Override
-    public void run(HashMap<String,String> args, Message message, Guild guild) {
-        guild.ban(args.get("targetArg"),0,args.get("reasonArg")).complete();
+    public void run(HashMap<String, Object> args, Message message, Guild guild) {
+        //guild.ban(args.get("targetArg"),0,args.get("reasonArg")).complete();
         message.reply(" I'm not so open-minded that I've lost my brains").complete();
     }
 }

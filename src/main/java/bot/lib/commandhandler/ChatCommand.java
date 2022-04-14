@@ -20,7 +20,7 @@ public abstract class ChatCommand {
         orderedFieldList = setOrderedFieldList();
     }
 
-    public abstract void run(HashMap<String,String> args, Message message, Guild guild);
+    public abstract void run(HashMap<String,Object> args, Message message, Guild guild);
 
     private int setNonOptionalArgCount(){
         var fieldList =  new ArrayList<>(Arrays.stream(this.getClass().getDeclaredFields()).toList());

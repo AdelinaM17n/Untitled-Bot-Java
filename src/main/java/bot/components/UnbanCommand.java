@@ -22,8 +22,8 @@ public class UnbanCommand extends ChatCommand {
     }
 
     @Override
-    public void run(HashMap<String, String> args, Message message, Guild guild){
-        guild.unban(args.get("targetArg")).complete();
+    public void run(HashMap<String, Object> args, Message message, Guild guild){
+        //guild.unban(args.get("targetArg")).complete();
         message.reply("Victrix causa deis placuit sed victa Catoni.").complete();
     }
 }

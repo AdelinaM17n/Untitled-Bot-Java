@@ -3,6 +3,9 @@ package bot.lib.commandhandler;
 import bot.UntitledBot;
 import bot.lib.commandhandler.annotation.ArgType;
 import bot.lib.commandhandler.annotation.CommandArg;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -24,8 +27,10 @@ public class CommandHandler extends ListenerAdapter {
 
         if(!UntitledBot.CommandMap.containsKey(command)) return;
 
+        System.out.println(commandArgContents.get(0));
+
         ChatCommand commandObject = UntitledBot.CommandMap.get(command);
-        var args = parseArgument(commandArgContents,commandObject);
+        var args = parseArgument(commandArgContents,commandObject, event.getJDA());
         if (args == null && commandObject.hasNonOptionalArgs()) {
             // TODO Perhaps it should indicate the user that the args weren't correct by replying to the command here
             // Since I am trying to make this platform independent as possible I won't do it currently.
@@ -35,11 +40,11 @@ public class CommandHandler extends ListenerAdapter {
         commandObject.run(args, event.getMessage(), event.getGuild());
     }
 
-    public HashMap<String,String> parseArgument(ArrayList<String> contents, ChatCommand commandObject){
+    public HashMap<String,Object> parseArgument(ArrayList<String> contents, ChatCommand commandObject, JDA apiWrapper){
         if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
 
         Field[] orderedList = commandObject.getOrderedFieldList();
-        HashMap<String,String> hashMap = new HashMap<>();
+        HashMap<String,Object> hashMap = new HashMap<>();
 
         for(int i =0; i < orderedList.length; i++){
             if(orderedList[i].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
@@ -47,7 +52,15 @@ public class CommandHandler extends ListenerAdapter {
                 orderedList[i] = null;
                 break;
             }else {
-                hashMap.put(orderedList[i].getName(), contents.get(0));
+                var orderedListType = orderedList[i].getType();
+                if(orderedListType == String.class){
+                    hashMap.put(orderedList[i].getName(), contents.get(0));
+                }else if (orderedListType == User.class){
+                    if(contents.get(0).startsWith("<@"))
+                        hashMap.put(orderedList[i].getName(),apiWrapper.retrieveUserById(contents.get(0).substring(3,21)));
+                    else
+                        hashMap.put(orderedList[i].getName(),apiWrapper.retrieveUserById(contents.get(0)));
+                }
                 contents.remove(0);
                 orderedList[i] = null;
             }
