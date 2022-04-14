@@ -27,6 +27,8 @@ public class CommandHandler extends ListenerAdapter {
         ChatCommand commandObject = UntitledBot.CommandMap.get(command);
         var args = parseArgument(commandArgContents,commandObject);
         if (args == null && commandObject.hasNonOptionalArgs()) {
+            // TODO Perhaps it should indicate the user that the args weren't correct by replying to the command here
+            // Since I am trying to make this platform independent as possible I won't do it currently.
             return;
         }
 
@@ -34,14 +36,11 @@ public class CommandHandler extends ListenerAdapter {
     }
 
     public HashMap<String,String> parseArgument(ArrayList<String> contents, ChatCommand commandObject){
-        var fieldList = new ArrayList<>(Arrays.asList(commandObject.getClass().getDeclaredFields()));
-        fieldList.removeIf(field -> !field.isAnnotationPresent(CommandArg.class));
         if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
 
-        Field[] orderedList = new Field[fieldList.size()];
-        for(Field field : fieldList){ orderedList[field.getAnnotation(CommandArg.class).index()] = field; }
-
+        var orderedList = commandObject.getOrderedFieldList();
         HashMap<String,String> hashMap = new HashMap<>();
+
         for(int i =0; i < orderedList.length; i++){
             if(orderedList[i].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
                 hashMap.put(orderedList[i].getName(), String.join(" ", contents));
