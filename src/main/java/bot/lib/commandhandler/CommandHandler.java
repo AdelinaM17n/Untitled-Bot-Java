@@ -38,7 +38,7 @@ public class CommandHandler extends ListenerAdapter {
     public HashMap<String,String> parseArgument(ArrayList<String> contents, ChatCommand commandObject){
         if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
 
-        var orderedList = commandObject.getOrderedFieldList();
+        Field[] orderedList = commandObject.getOrderedFieldList();
         HashMap<String,String> hashMap = new HashMap<>();
 
         for(int i =0; i < orderedList.length; i++){
