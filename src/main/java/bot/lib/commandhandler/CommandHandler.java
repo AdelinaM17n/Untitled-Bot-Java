@@ -40,7 +40,7 @@ public class CommandHandler extends ListenerAdapter {
             var innerClass = commandObject.getArgsClass();
             var constructor = innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
 
-            var argsInstance = innerClass.cast(constructor.newInstance(args));
+            var argsInstance = constructor.newInstance(args);//innerClass.cast(constructor.newInstance(args));
             commandObject.getExecutionMethod().invoke(commandObject,argsInstance,event.getMessage(),event.getGuild());
 
         }catch(NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e){
@@ -55,7 +55,7 @@ public class CommandHandler extends ListenerAdapter {
 
         Field[] orderedList = commandObject.getOrderedFieldList();
         Object[] listObjects = new Object[orderedList.length+1];
-        listObjects[0] = commandObject.getClass().cast(commandObject);
+        listObjects[0] = commandObject;//commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;
         for(int i =1; i <= orderedList.length; i++){
