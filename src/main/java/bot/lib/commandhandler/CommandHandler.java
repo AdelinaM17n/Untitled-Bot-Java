@@ -54,34 +54,35 @@ public class CommandHandler extends ListenerAdapter {
         if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
 
         Field[] orderedList = commandObject.getOrderedFieldList();
-        Object[] listObjects = new Object[orderedList.length];
+        Object[] listObjects = new Object[orderedList.length+1];
+        listObjects[0] = commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;
-        for(int i =0; i < orderedList.length; i++){
+        for(int i =1; i <= orderedList.length; i++){
             if(hasMetCoalesc){
                 listObjects[i] = null;
-            }else if(orderedList[i].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
+            }else if(orderedList[i-1].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
                 listObjects[i] =  String.join(" ", contents);
-                orderedList[i] = null;
+                orderedList[i-1] = null;
                 hasMetCoalesc = true;
             }else {
-                var orderedListType = orderedList[i].getType();
+                var orderedListType = orderedList[i-1].getType();
                 if(orderedListType == String.class){
                     listObjects[i] = contents.get(0);
-                    orderedList[i] = null;
+                    orderedList[i-1] = null;
                 }else if (orderedListType == User.class){
                     if(contents.get(0).startsWith("<@")){
-                        listObjects[i] = apiWrapper.retrieveUserById(contents.get(0).substring(3, 20));
-                        orderedList[i] = null;
+                        listObjects[i] = apiWrapper.retrieveUserById(contents.get(0).substring(2, 20)).complete();
+                        orderedList[i-1] = null;
                     }else{
-                        listObjects[i] = apiWrapper.retrieveUserById(contents.get(0));
-                        orderedList[i] = null;
+                        listObjects[i] = apiWrapper.retrieveUserById(contents.get(0)).complete();
+                        orderedList[i-1] = null;
                     }
                 }else {
                     listObjects[i] = null;
                 }
                 contents.remove(0);
-                orderedList[i] = null;
+                orderedList[i-1] = null;
             }
         }
 

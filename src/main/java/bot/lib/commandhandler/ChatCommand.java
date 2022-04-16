@@ -29,7 +29,7 @@ public abstract class ChatCommand {
     private Class<?>[] setArgsFieldTypeList(Field[] orderedFieldList){
         var filedTypeArray = new Class<?>[orderedFieldList.length+1];
         filedTypeArray[0] = this.getClass();
-        for(int i =1; i < orderedFieldList.length; i++){
+        for(int i =1; i <= orderedFieldList.length; i++){
             filedTypeArray[i] = orderedFieldList[i-1].getType();
         }
         return filedTypeArray;
