@@ -1,7 +1,7 @@
 package bot.lib.commandhandler;
 
 import bot.lib.commandhandler.annotation.ArgInnerClass;
-import bot.lib.commandhandler.annotation.CommandArg;
+import bot.lib.commandhandler.annotation.ArgField;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,14 +47,14 @@ public abstract class ChatCommand {
 
     private int setNonOptionalArgCount(Class<?> clazz){
         var fieldList =  new ArrayList<>(Arrays.stream(clazz.getDeclaredFields()).toList());
-        fieldList.removeIf(field -> !field.isAnnotationPresent(CommandArg.class) || (field.isAnnotationPresent(CommandArg.class) && field.getAnnotation(CommandArg.class).optional()));
+        fieldList.removeIf(field -> !field.isAnnotationPresent(ArgField.class) || (field.isAnnotationPresent(ArgField.class) && field.getAnnotation(ArgField.class).optional()));
         return fieldList.size();
     }
     private Field[] setOrderedFieldList(Class<?> clazz){
         var fieldList = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
-        fieldList.removeIf(field -> !field.isAnnotationPresent(CommandArg.class));
+        fieldList.removeIf(field -> !field.isAnnotationPresent(ArgField.class));
         Field[] orderedList = new Field[fieldList.size()];
-        for(Field field : fieldList){ orderedList[field.getAnnotation(CommandArg.class).index()] = field; }
+        for(Field field : fieldList){ orderedList[field.getAnnotation(ArgField.class).index()] = field; }
         return orderedList;
     }
 

@@ -2,8 +2,8 @@ package bot.components;
 
 import bot.lib.commandhandler.ChatCommand;
 import bot.lib.commandhandler.annotation.ArgInnerClass;
-import bot.lib.commandhandler.annotation.ArgType;
-import bot.lib.commandhandler.annotation.CommandArg;
+import bot.lib.commandhandler.annotation.ArgParseType;
+import bot.lib.commandhandler.annotation.ArgField;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -23,10 +23,11 @@ public class BanCommand extends ChatCommand {
     }
 
     @ArgInnerClass
+    @SuppressWarnings("all")
     public class BanCommandArgs {
-        @CommandArg(type = ArgType.NORMAL, index = 0)
+        @ArgField(type = ArgParseType.NORMAL, index = 0)
         private User targetArg;
-        @CommandArg(type = ArgType.STRING_COALESCING, index = 1, optional = true)
+        @ArgField(type = ArgParseType.STRING_COALESCING, index = 1, optional = true)
         private String reasonArg;
 
         public BanCommandArgs(User targetArg, String reasonArg){

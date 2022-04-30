@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface CommandArg {
-    ArgType type() default ArgType.NORMAL;
+public @interface ArgField {
+    ArgParseType type() default ArgParseType.NORMAL;
     int index();
     boolean optional() default false;
     //String description() default "";

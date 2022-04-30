@@ -1,8 +1,8 @@
 package bot.lib.commandhandler;
 
 import bot.UntitledBot;
-import bot.lib.commandhandler.annotation.ArgType;
-import bot.lib.commandhandler.annotation.CommandArg;
+import bot.lib.commandhandler.annotation.ArgParseType;
+import bot.lib.commandhandler.annotation.ArgField;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -59,9 +59,10 @@ public class CommandHandler extends ListenerAdapter {
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;
         for(int i =1; i <= orderedList.length; i++){
+            if(orderedList[i-1] == null) return null;
             if(hasMetCoalesc){
                 listObjects[i] = null;
-            }else if(orderedList[i-1].getAnnotation(CommandArg.class).type() == ArgType.STRING_COALESCING){
+            }else if(orderedList[i-1].getAnnotation(ArgField.class).type() == ArgParseType.STRING_COALESCING){
                 listObjects[i] =  String.join(" ", contents);
                 orderedList[i-1] = null;
                 hasMetCoalesc = true;
@@ -73,11 +74,10 @@ public class CommandHandler extends ListenerAdapter {
                 }else if (orderedListType == User.class){
                     if(contents.get(0).startsWith("<@")){
                         listObjects[i] = apiWrapper.retrieveUserById(contents.get(0).substring(2, 20)).complete();
-                        orderedList[i-1] = null;
                     }else{
                         listObjects[i] = apiWrapper.retrieveUserById(contents.get(0)).complete();
-                        orderedList[i-1] = null;
                     }
+                    orderedList[i-1] = null;
                 }else {
                     listObjects[i] = null;
                 }
@@ -86,6 +86,6 @@ public class CommandHandler extends ListenerAdapter {
             }
         }
 
-        return Arrays.stream(orderedList).anyMatch(field -> field != null && !field.getAnnotation(CommandArg.class).optional()) ? null : listObjects;
+        return Arrays.stream(orderedList).anyMatch(field -> field != null && !field.getAnnotation(ArgField.class).optional()) ? null : listObjects;
     }
 }
