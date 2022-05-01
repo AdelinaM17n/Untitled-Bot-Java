@@ -24,11 +24,11 @@ public class CommandHandler extends ListenerAdapter {
         String command = messageContents[0];
         var commandArgContents = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(messageContents, 1, messageContents.length)));
 
-        if(!UntitledBot.CommandMap.containsKey(command)) return;
+        if(!UntitledBot.CommandMapv.containsKey(command)) return;
 
         System.out.println(commandArgContents.get(0));
 
-        ChatCommand commandObject = UntitledBot.CommandMap.get(command);
+        ChatCommandContainer commandObject = UntitledBot.CommandMapv.get(command);
         var args = parseArgument(commandArgContents,commandObject, event.getJDA());
         if (args == null && commandObject.hasNonOptionalArgs()) {
             // TODO Perhaps it should indicate the user that the args weren't correct by replying to the command here
@@ -41,21 +41,20 @@ public class CommandHandler extends ListenerAdapter {
             var constructor = innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
 
             var argsInstance = constructor.newInstance(args);//innerClass.cast(constructor.newInstance(args));
-            commandObject.getExecutionMethod().invoke(commandObject,argsInstance,event.getMessage(),event.getGuild());
+            commandObject.getExecutionMethod().invoke(commandObject.getExtensionInstance(),argsInstance,event.getMessage(),event.getGuild());
 
         }catch(NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e){
             e.printStackTrace();
         }
 
-        //commandObject.run(args, event.getMessage(), event.getGuild());
     }
 
-    public Object[] parseArgument(ArrayList<String> contents, ChatCommand commandObject, JDA apiWrapper){
-        if(contents.size() < commandObject.getNonOptionalArgCount()) return null;
+    public Object[] parseArgument(ArrayList<String> contents, ChatCommandContainer containerObject, JDA apiWrapper){
+        if(contents.size() < containerObject.getNonOptionalArgCount()) return null;
 
-        Field[] orderedList = commandObject.getOrderedFieldList();
+        Field[] orderedList = containerObject.getOrderedFieldList();
         Object[] listObjects = new Object[orderedList.length+1];
-        listObjects[0] = commandObject;//commandObject.getClass().cast(commandObject);
+        listObjects[0] = containerObject.getExtensionInstance();//commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;
         for(int i =1; i <= orderedList.length; i++){
