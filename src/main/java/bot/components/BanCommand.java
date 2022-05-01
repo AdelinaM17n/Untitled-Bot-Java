@@ -20,6 +20,16 @@ public class BanCommand extends Extension {
         System.out.println(args.targetArg.getName());
     }
 
+    @ChatCommand(
+            name = "unban",
+            argsClass = BanCommandArgs.class
+    )
+    public void unban_run(BanCommandArgs args, Message message, Guild guild) {
+        //guild.ban(args.targetArg.getId(),0).complete();
+        message.reply("nihil novi sub sole").complete();
+        System.out.println(args.targetArg.getName());
+    }
+
     @ArgInnerClass
     @SuppressWarnings("all")
     public class BanCommandArgs {

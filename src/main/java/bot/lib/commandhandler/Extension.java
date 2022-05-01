@@ -5,23 +5,23 @@ import bot.lib.commandhandler.annotation.ArgField;
 import bot.lib.commandhandler.annotation.ChatCommand;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public abstract class Extension {
-    //private Stream<Method> commandMethods = Arrays.stream(this.getClass().getDeclaredMethods()).filter(method -> method.isAnnotationPresent(ChatCommand.class));
-    // TODO
-    //  MAKE A FUCKING INIT METHOD THAT WILL CREATE A COMMAND CONTAINER AND STORE IT IN THE COMMAND MAP
     public void init(){
         var methods = Arrays.stream(this.getClass().getDeclaredMethods()).filter(method -> method.isAnnotationPresent(ChatCommand.class));
         methods.forEach(method -> {
             var annotation = method.getAnnotation(ChatCommand.class);
+
+            if(UntitledBot.CommandMapv.containsKey(annotation.name())) {
+                System.err.println("Two commands cannot have the same name");
+                return;
+            }
+
             var orderedFieldList = findOrderedFieldList(annotation.argsClass());
             var typeList = findArgsFieldTypeList(orderedFieldList);
             ChatCommandContainer container = new ChatCommandContainer(
-                    annotation.name(),
                     findNonOptionalArgCount(annotation.argsClass()),
                     orderedFieldList,
                     method,

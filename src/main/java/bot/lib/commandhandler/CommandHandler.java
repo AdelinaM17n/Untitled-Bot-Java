@@ -26,8 +26,6 @@ public class CommandHandler extends ListenerAdapter {
 
         if(!UntitledBot.CommandMapv.containsKey(command)) return;
 
-        System.out.println(commandArgContents.get(0));
-
         ChatCommandContainer commandObject = UntitledBot.CommandMapv.get(command);
         var args = parseArgument(commandArgContents,commandObject, event.getJDA());
         if (args == null && commandObject.hasNonOptionalArgs()) {
