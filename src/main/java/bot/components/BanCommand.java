@@ -15,7 +15,7 @@ public class BanCommand extends Extension {
             argsClass = BanCommandArgs.class
     )
     public void run(BanCommandArgs args, Message message, Guild guild) {
-        //guild.ban(args.targetArg.getId(),0).complete();
+        guild.ban(args.targetArg.getId(),0).complete();
         message.reply(" I'm not so open-minded that I've lost my brains").complete();
         System.out.println(args.targetArg.getName());
     }
@@ -25,7 +25,7 @@ public class BanCommand extends Extension {
             argsClass = BanCommandArgs.class
     )
     public void unban_run(BanCommandArgs args, Message message, Guild guild) {
-        guild.ban(args.targetArg.getId(),0).complete();
+        guild.unban(args.targetArg.getId()).complete();
         message.reply("nihil novi sub sole").complete();
         System.out.println(args.targetArg.getName());
     }
@@ -37,10 +37,5 @@ public class BanCommand extends Extension {
         public User targetArg;
         @ArgField(type = ArgParseType.STRING_COALESCING, index = 1, optional = true)
         public String reasonArg;
-
-        /*public BanCommandArgs(User targetArg, String reasonArg){
-            this.targetArg = targetArg;
-            this.reasonArg = reasonArg;
-        }*/
     }
 }

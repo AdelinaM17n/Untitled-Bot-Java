@@ -60,34 +60,34 @@ public class CommandHandler extends ListenerAdapter {
 
         Field[] orderedList = containerObject.getOrderedFieldList();
         Object[] listObjects = new Object[orderedList.length+1];
-        listObjects[0] = containerObject.extensionInstance();//commandObject.getClass().cast(commandObject);
+        //listObjects[0] = containerObject.extensionInstance();//commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;
-        for(int i =1; i <= orderedList.length; i++){
-            if(orderedList[i-1] == null) return null;
+        for(int i =0; i <= orderedList.length-1; i++){
+            if(orderedList[i] == null) return null;
             if(hasMetCoalesc){
                 listObjects[i] = null;
-            }else if(orderedList[i-1].getAnnotation(ArgField.class).type() == ArgParseType.STRING_COALESCING){
+            }else if(orderedList[i].getAnnotation(ArgField.class).type() == ArgParseType.STRING_COALESCING){
                 listObjects[i] =  String.join(" ", contents);
-                orderedList[i-1] = null;
+                orderedList[i] = null;
                 hasMetCoalesc = true;
             }else {
-                var orderedListType = orderedList[i-1].getType();
+                var orderedListType = orderedList[i].getType();
                 if(orderedListType == String.class){
                     listObjects[i] = contents.get(0);
-                    orderedList[i-1] = null;
+                    orderedList[i] = null;
                 }else if (orderedListType == User.class){
                     if(contents.get(0).startsWith("<@")){
                         listObjects[i] = apiWrapper.retrieveUserById(contents.get(0).substring(2, 20)).complete();
                     }else{
                         listObjects[i] = apiWrapper.retrieveUserById(contents.get(0)).complete();
                     }
-                    orderedList[i-1] = null;
+                    orderedList[i] = null;
                 }else {
                     listObjects[i] = null;
                 }
                 contents.remove(0);
-                orderedList[i-1] = null;
+                orderedList[i] = null;
             }
         }
 
