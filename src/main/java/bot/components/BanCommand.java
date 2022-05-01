@@ -38,9 +38,9 @@ public class BanCommand extends Extension {
         @ArgField(type = ArgParseType.STRING_COALESCING, index = 1, optional = true)
         private String reasonArg;
 
-        public BanCommandArgs(User targetArg, String reasonArg){
+        /*public BanCommandArgs(User targetArg, String reasonArg){
             this.targetArg = targetArg;
             this.reasonArg = reasonArg;
-        }
+        }*/
     }
 }

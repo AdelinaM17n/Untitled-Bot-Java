@@ -24,9 +24,9 @@ public class CommandHandler extends ListenerAdapter {
         String command = messageContents[0];
         var commandArgContents = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(messageContents, 1, messageContents.length)));
 
-        if(!UntitledBot.CommandMapv.containsKey(command)) return;
+        if(!UntitledBot.CommandMap.containsKey(command)) return;
 
-        ChatCommandContainer commandObject = UntitledBot.CommandMapv.get(command);
+        ChatCommandContainer commandObject = UntitledBot.CommandMap.get(command);
         var args = parseArgument(commandArgContents,commandObject, event.getJDA());
         if (args == null && commandObject.hasNonOptionalArgs()) {
             // TODO Perhaps it should indicate the user that the args weren't correct by replying to the command here
@@ -36,11 +36,14 @@ public class CommandHandler extends ListenerAdapter {
 
         try{
             var innerClass = commandObject.argsClass();
-            var constructor = innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
+            var constructor = innerClass.getConstructor(commandObject.getClass()); //innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
+            var argsInstance = constructor.newInstance(commandObject);
 
-            var argsInstance = constructor.newInstance(args);//innerClass.cast(constructor.newInstance(args));
+            var fieldListIterator = Arrays.stream(commandObject.getOrderedFieldList()).iterator();
+            var argsIterator = Arrays.stream(args).iterator();
+            while (fieldListIterator.hasNext() && argsIterator.hasNext()){fieldListIterator.next().set(argsInstance,argsIterator.next());}
+
             commandObject.executionMethod().invoke(commandObject.extensionInstance(),argsInstance,event.getMessage(),event.getGuild());
-
         }catch(NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e){
             e.printStackTrace();
         }

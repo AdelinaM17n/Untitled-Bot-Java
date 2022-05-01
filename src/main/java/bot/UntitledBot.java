@@ -9,11 +9,10 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 public class UntitledBot {
-    public static HashMap<String, ChatCommandContainer> CommandMapv = new HashMap<>();
+    public static HashMap<String, ChatCommandContainer> CommandMap = new HashMap<>();
     public static String prefix = "!";
 
     public static void main(String[] args) throws LoginException {

@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Extension {
+    // TODO - Make use of records for args
     public void init(){
         var methods = Arrays.stream(this.getClass().getDeclaredMethods()).filter(method -> method.isAnnotationPresent(ChatCommand.class));
         methods.forEach(method -> {
             var annotation = method.getAnnotation(ChatCommand.class);
 
-            if(UntitledBot.CommandMapv.containsKey(annotation.name())) {
+            if(UntitledBot.CommandMap.containsKey(annotation.name())) {
                 System.err.println("Two commands cannot have the same name");
                 return;
             }
@@ -29,7 +30,7 @@ public abstract class Extension {
                     typeList,
                     this
             );
-            UntitledBot.CommandMapv.put(annotation.name(), container);
+            UntitledBot.CommandMap.put(annotation.name(), container);
         });
     }
 
