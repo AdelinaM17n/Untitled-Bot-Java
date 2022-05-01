@@ -25,7 +25,7 @@ public class BanCommand extends Extension {
             argsClass = BanCommandArgs.class
     )
     public void unban_run(BanCommandArgs args, Message message, Guild guild) {
-        //guild.ban(args.targetArg.getId(),0).complete();
+        guild.ban(args.targetArg.getId(),0).complete();
         message.reply("nihil novi sub sole").complete();
         System.out.println(args.targetArg.getName());
     }
@@ -34,9 +34,9 @@ public class BanCommand extends Extension {
     @SuppressWarnings("all")
     public class BanCommandArgs {
         @ArgField(type = ArgParseType.NORMAL, index = 0)
-        private User targetArg;
+        public User targetArg;
         @ArgField(type = ArgParseType.STRING_COALESCING, index = 1, optional = true)
-        private String reasonArg;
+        public String reasonArg;
 
         /*public BanCommandArgs(User targetArg, String reasonArg){
             this.targetArg = targetArg;

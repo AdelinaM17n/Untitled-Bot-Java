@@ -3,6 +3,7 @@ package bot.lib.commandhandler;
 import bot.UntitledBot;
 import bot.lib.commandhandler.annotation.ArgParseType;
 import bot.lib.commandhandler.annotation.ArgField;
+import bot.lib.commandhandler.annotation.NoArgs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,9 +36,13 @@ public class CommandHandler extends ListenerAdapter {
         }
 
         try{
+            if(commandObject.argsClass() == NoArgs.class || (!commandObject.hasNonOptionalArgs() && args == null)){
+                commandObject.executionMethod().invoke(commandObject.extensionInstance(),event.getMessage(),event.getGuild());
+                return;
+            }
             var innerClass = commandObject.argsClass();
-            var constructor = innerClass.getConstructor(commandObject.getClass()); //innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
-            var argsInstance = constructor.newInstance(commandObject);
+            var constructor = innerClass.getConstructor(commandObject.extensionInstance().getClass()); //innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
+            var argsInstance = constructor.newInstance(commandObject.extensionInstance());
 
             var fieldListIterator = Arrays.stream(commandObject.getOrderedFieldList()).iterator();
             var argsIterator = Arrays.stream(args).iterator();
