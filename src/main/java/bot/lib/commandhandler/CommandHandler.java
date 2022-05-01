@@ -44,9 +44,17 @@ public class CommandHandler extends ListenerAdapter {
             var constructor = innerClass.getConstructor(commandObject.extensionInstance().getClass()); //innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
             var argsInstance = constructor.newInstance(commandObject.extensionInstance());
 
-            var fieldListIterator = Arrays.stream(commandObject.getOrderedFieldList()).iterator();
+            var fieldListIterator = Arrays.stream(commandObject.orderedFieldList()).iterator();
             var argsIterator = Arrays.stream(args).iterator();
-            while (fieldListIterator.hasNext() && argsIterator.hasNext()){fieldListIterator.next().set(argsInstance,argsIterator.next());}
+            var typeIterator = Arrays.stream(commandObject.argsFieldTypeList()).iterator();
+
+            //if(commandObject.fi)
+            while (fieldListIterator.hasNext() && argsIterator.hasNext() && typeIterator.hasNext()){
+                if(fieldListIterator.next().getType() != typeIterator.next() && fieldListIterator.next() != null){
+                    System.err.println("Type of the arg and parsed value's type does not match");
+                }
+                fieldListIterator.next().set(argsInstance,argsIterator.next());
+            }
 
             commandObject.executionMethod().invoke(commandObject.extensionInstance(),argsInstance,event.getMessage(),event.getGuild());
         }catch(NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e){
@@ -58,7 +66,7 @@ public class CommandHandler extends ListenerAdapter {
     public Object[] parseArgument(ArrayList<String> contents, ChatCommandContainer containerObject, JDA apiWrapper){
         if(contents.size() < containerObject.nonOptionalArgCount()) return null;
 
-        Field[] orderedList = containerObject.getOrderedFieldList();
+        Field[] orderedList = containerObject.orderedFieldList();
         Object[] listObjects = new Object[orderedList.length+1];
         //listObjects[0] = containerObject.extensionInstance();//commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();

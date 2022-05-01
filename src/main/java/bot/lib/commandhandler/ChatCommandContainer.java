@@ -14,6 +14,6 @@ public record ChatCommandContainer(
         Extension extensionInstance
 ){
     public boolean hasNonOptionalArgs() {return nonOptionalArgCount > 0;}
-    public Field[] getOrderedFieldList() {return Arrays.copyOf(orderedFieldList, orderedFieldList.length);}
-    public Class<?>[] getArgsFieldTypeList() {return Arrays.copyOf(argsFieldTypeList, argsFieldTypeList.length);}
+    public Field[] orderedFieldList() {return Arrays.copyOf(orderedFieldList, orderedFieldList.length);}
+    public Class<?>[] argsFieldTypeList() {return Arrays.copyOf(argsFieldTypeList, argsFieldTypeList.length);}
 }
