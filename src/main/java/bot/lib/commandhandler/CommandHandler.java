@@ -52,6 +52,7 @@ public class CommandHandler extends ListenerAdapter {
             var argsInstance = constructor.newInstance(commandObject.extensionInstance());
 
             var orderedList = commandObject.orderedFieldList();
+            assert args != null;
 
             for(int i=0; i < orderedList.length; i++){
                 if(args[i] != null && !orderedList[i].getType().isAssignableFrom(args[i].getClass())){

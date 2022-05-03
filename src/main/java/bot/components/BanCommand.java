@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.internal.entities.UserImpl;
 
 public class BanCommand extends Extension {
     @ChatCommand(
@@ -34,7 +33,6 @@ public class BanCommand extends Extension {
     }
 
     @ArgInnerClass
-    @SuppressWarnings("all")
     public class BanCommandArgs {
         @ArgField(type = ArgParseType.NORMAL, index = 0)
         public User targetArg;
