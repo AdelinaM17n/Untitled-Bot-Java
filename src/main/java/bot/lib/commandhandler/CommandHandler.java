@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CommandHandler extends ListenerAdapter {
     @Override
@@ -29,9 +30,15 @@ public class CommandHandler extends ListenerAdapter {
 
         ChatCommandContainer commandObject = UntitledBot.CommandMap.get(command);
         var args = parseArgument(commandArgContents,commandObject, event.getJDA());
+
         if (args == null && commandObject.hasNonOptionalArgs()) {
             // TODO Perhaps it should indicate the user that the args weren't correct by replying to the command here
             // Since I am trying to make this platform independent as possible I won't do it currently.
+            return;
+        }
+
+        if(!Objects.requireNonNull(event.getMember()).hasPermission(commandObject.requiredPerms())){
+            event.getMessage().reply("Perms not met").complete();
             return;
         }
 
