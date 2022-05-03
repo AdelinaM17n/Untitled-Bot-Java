@@ -44,16 +44,14 @@ public class CommandHandler extends ListenerAdapter {
             var constructor = innerClass.getConstructor(commandObject.extensionInstance().getClass()); //innerClass.getDeclaredConstructor(commandObject.getArgsFieldTypeList());
             var argsInstance = constructor.newInstance(commandObject.extensionInstance());
 
-            var fieldListIterator = Arrays.stream(commandObject.orderedFieldList()).iterator();
-            var argsIterator = Arrays.stream(args).iterator();
-            var typeIterator = Arrays.stream(commandObject.argsFieldTypeList()).iterator();
+            var orderedList = commandObject.orderedFieldList();
 
-            //if(commandObject.fi)
-            while (fieldListIterator.hasNext() && argsIterator.hasNext() && typeIterator.hasNext()){
-                if(fieldListIterator.next().getType() != typeIterator.next() && fieldListIterator.next() != null){
-                    System.err.println("Type of the arg and parsed value's type does not match");
+            for(int i=0; i < orderedList.length; i++){
+                if(args[i] != null && !orderedList[i].getType().isAssignableFrom(args[i].getClass())){
+                   System.err.println("Arg type does not match");
+                   return;
                 }
-                fieldListIterator.next().set(argsInstance,argsIterator.next());
+                orderedList[i].set(argsInstance,args[i]);
             }
 
             commandObject.executionMethod().invoke(commandObject.extensionInstance(),argsInstance,event.getMessage(),event.getGuild());
@@ -67,7 +65,7 @@ public class CommandHandler extends ListenerAdapter {
         if(contents.size() < containerObject.nonOptionalArgCount()) return null;
 
         Field[] orderedList = containerObject.orderedFieldList();
-        Object[] listObjects = new Object[orderedList.length+1];
+        Object[] listObjects = new Object[orderedList.length];
         //listObjects[0] = containerObject.extensionInstance();//commandObject.getClass().cast(commandObject);
         //HashMap<String,Object> hashMap = new HashMap<>();
         boolean hasMetCoalesc = false;

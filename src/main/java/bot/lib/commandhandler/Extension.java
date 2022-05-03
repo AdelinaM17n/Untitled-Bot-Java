@@ -21,13 +21,14 @@ public abstract class Extension {
             }
 
             var orderedFieldList = findOrderedFieldList(annotation.argsClass());
-            var typeList = findArgsFieldTypeList(orderedFieldList);
+            //var typeList = findArgsFieldTypeList(orderedFieldList);
             ChatCommandContainer container = new ChatCommandContainer(
                     findNonOptionalArgCount(annotation.argsClass()),
                     orderedFieldList,
                     method,
                     annotation.argsClass(),
-                    typeList,
+                    //typeList,
+                    annotation.requiredPerms(),
                     this
             );
             UntitledBot.CommandMap.put(annotation.name(), container);
@@ -48,12 +49,11 @@ public abstract class Extension {
         return fieldList.size();
     }
 
-    private Class<?>[] findArgsFieldTypeList(Field[] orderedFieldList){
-        var filedTypeArray = new Class<?>[orderedFieldList.length+1];
-        filedTypeArray[0] = this.getClass();
-        for(int i =1; i <= orderedFieldList.length; i++){
-            filedTypeArray[i] = orderedFieldList[i-1].getType();
+    /*private Class<?>[] findArgsFieldTypeList(Field[] orderedFieldList){
+        var filedTypeArray = new Class<?>[orderedFieldList.length];
+        for(int i =0; i < orderedFieldList.length; i++){
+            filedTypeArray[i] = orderedFieldList[i].getType();
         }
         return filedTypeArray;
-    }
+    } */
 }
